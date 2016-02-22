@@ -9,73 +9,155 @@
 	<body>
 		<h1 class="pageTitle">Simple Simon Game</h1>
 			<div id="upperContainer">
-				<div id="upperLeft"></div>
-				<div id="upperRight"></div>
+				<div id="upperLeft" data-id="0" data-color="#05fa42"></div>
+				<div id="upperRight" data-id="1" data-color="#ff0000"></div>
 			</div>
 			<div id="lowerContainer">
-				<div id="lowerLeft"></div>
-				<div id="lowerRight"></div>
+				<div id="lowerLeft" data-id="3" data-color="#ffee00"></div>
+				<div id="lowerRight" data-id="2" data-color="#00ddff"></div>
+			</div>
+			<div id="medallion">
+				<h4 class="label">Round</h4>
+				<h1 class="score" id="round">0</h1>			
+				<button id="startGame"> Start Game</button>
+				<h4 class="label">Wins for Simon</h4>
+				<h1 class="score" id="simonScore">0</h1>			
 			</div>
 
-			<script src="/js/jquery-2.2.0.min.js"></script>
+		<script src="/js/jquery-2.2.0.min.js"></script>
 
-			<script>
-				"use strict";
+		<script>
+			"use strict";
+
+			(function() {
 
 				var uprLft = $("#upperLeft");
 				var uprRgt = $("#upperRight");
 				var lwrRgt = $("#lowerRight");
 				var lwrLft = $("#lowerLeft");
 
-				// Naming functions to light up quadrants
-				function lgtUprLft() {
-					uprLft.css("background-color", "#05fa42");
+				var simonArray = [];
+				var currentIndex = 0;
+				var simonWinCount = 0;
+
+				// function to light up quadrants
+
+				function lightItUp(colorId) {
+					var quadrant = $('[data-id="' + colorId + '"]');
+					quadrant.css('background-color', quadrant.data('color'));
 					setTimeout(function(){
-						uprLft.css("background-color", "#04B431");
+						quadrant.css("background-color", "");
 					}, 500);
 				};
 
-				function lgtUprRgt() {
-					uprRgt.css("background-color", "#ff0000");
-					setTimeout(function(){
-						uprRgt.css("background-color", "#DF0101");
-					}, 500);
-				};
+				// function getting Simon to program sequences
 
-				function lgtLwrRgt() {
-					lwrRgt.css("background-color", "#00ddff");
-					setTimeout(function(){
-						lwrRgt.css("background-color", "#0080ff");
-					}, 500);
-				};
+				function getRandomInt() {
+					return Math.floor(Math.random()*4);
+				}
 
-				function lgtLwrLft() {
-					lwrLft.css("background-color", "#ffee00");
-					setTimeout(function(){
-						lwrLft.css("background-color", "#ffbf00");
-					}, 500);
-				};
+				function newRound() {
+					var rando = getRandomInt();
+					simonArray.push(rando.toString());
+					roundNum();
+				}
+
+				// Getting Simon to light up quadrants based on simonArray
+
+				function playSimonSeq() {
+					newRound();
+					var i = 0;
+					var intervalId = setInterval(function() {
+						lightItUp(simonArray[i]);
+						i++;
+					if (i == simonArray.length) {
+						clearInterval(intervalId);
+						}
+					}, 600);
+				}
+
+				// comparing user input to simonArray
+
+				function compareValue(color) {
+					// console.log(color);
+					var currentUserInput = $(color).data('id');
+					// console.log(currentUserInput);
+					// console.log(simonArray[currentIndex]);
+					if (currentUserInput == simonArray[currentIndex]) {
+						currentIndex++;
+						console.log ("current index is: " + currentIndex)
+
+					} else {
+						currentIndex = 0;
+						simonArray = [];
+						simonWinCount += 1;
+						alert("You screwed the pooch!")
+						winNum();
+						// console.log ("Simon array is: " + simonArray)
+					}
+
+					if (currentIndex == simonArray.length) {
+						currentIndex = 0;
+						// console.log(simonArray);
+						setTimeout(playSimonSeq, 1000);
+					}
+				}
+
+				function roundNum() {
+					$('#round').html(simonArray.length);
+				}
+
+				function winNum() {
+					$('#simonScore').html(simonWinCount);
+				}
+
+				function onStartClick() {
+					playSimonSeq();
+					$(this).text("Reset");
+					$(this).off('click');
+					$(this).click(onResetClick);
+				}
+
+				function onResetClick() {
+					currentIndex = 0;
+					simonArray = [];
+					simonWinCount = 0;
+					winNum();
+					$(this).text("Start Game");
+					$(this).off('click');
+					$(this).click(onStartClick);
+				}
 
 				// Adding click listeners for quadrants
 				
 				uprLft.on('click', function() {
-					lgtUprLft();
+					lightItUp($(this).data('id'));
+					compareValue(this);
 				});
 
 				uprRgt.on('click', function() {
-					lgtUprRgt();
+					lightItUp($(this).data('id'));
+					compareValue(this);
 				});
 
 				lwrRgt.on('click', function() {
-					lgtLwrRgt();
+					lightItUp($(this).data('id'));
+					compareValue(this);
 				});
 
 				lwrLft.on('click', function() {
-					lgtLwrLft();
+					lightItUp($(this).data('id'));
+					compareValue(this);
 				});
 
-				// getting Simon to program sequences
+				// Keeping track of the round
 
-			</script>
+				// code to toggle Start Game and Reset buttons 
+
+				$('#startGame').on('click', onStartClick);
+					// Closing my IFFE statement
+			}());
+
+		</script>
 	</body>
 </html>

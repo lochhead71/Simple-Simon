@@ -9,19 +9,41 @@ body {
 	margin-bottom: 48px;
 }
 
+.label {
+	font-family: 'Krona One', sans-serif;
+	font-size: 1.25em;
+	color: white;
+	text-align: center;
+	margin-bottom: 0px;
+	
+}
+
+.score {
+	font-family: arial, sans-serif;
+	font-size: 5em;
+	color: white;
+	text-align: center;
+	margin-top: 0px;
+	margin-bottom: 4px; 
+
+}
+
 #upperContainer {
 	display: flex;
 	justify-content: center;
 	align-items: flex-end;
+	z-index: -1
 }
 
 #lowerContainer {
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
+	z-index: -1
 }
 
 #upperLeft {
+	transition: all 0.3s;
 	width: 300px;
 	height: 300px;
 	border-radius: 300px 0px 0px 0px;
@@ -33,6 +55,7 @@ body {
 }
 
 #upperRight {
+	transition: all 0.3s;
 	width: 300px;
 	height: 300px;
 	border-radius: 0px 300px 0px 0px;
@@ -44,6 +67,7 @@ body {
 }
 
 #lowerRight {
+	transition: all 0.3s;
 	width: 300px;
 	height: 300px;
 	border-radius: 0px 0px 300px 0px;
@@ -55,6 +79,7 @@ body {
 }
 
 #lowerLeft {
+	transition: all 0.3s;
 	width: 300px;
 	height: 300px;
 	border-radius: 0px 0px 0px 300px;
@@ -63,4 +88,37 @@ body {
 	border-top: 10px solid #848484;
 	border-bottom: 20px solid #424242;
 	background-color: #ffbf00;
+}
+
+#medallion {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 320px;
+	height: 320px;
+	margin: auto;
+	top: -510px;
+	border-radius: 320px;
+	border-left: 20px solid #848484;
+	border-right: 20px solid #000000;
+	border-top: 20px solid #848484;
+	border-bottom: 20px solid #000000;
+	background-color: #424242;
+	z-index: 1
+
+}
+
+#startGame {
+	width: 160px;
+	height: 50px;
+	font-family: 'Krona One', sans-serif;
+	font-size: 1em;
+	color: white;
+	background-color: #848484;
+	border-radius: 12px;
+	border-width: 4px;
+	margin: auto;
+
+
 }
